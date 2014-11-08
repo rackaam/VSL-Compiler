@@ -42,7 +42,24 @@ statement [SymbolTable symTab] returns [Code3a code]
         code.append(Code3aGenerator.genLabel(l_fin));
     }
     )
-	| b=block[symTab] {
+	| 
+	^(  WHILE_KW e = expression[symTab]
+    {
+        LabelSymbol l_deb = SymbDistrib.newLabel();
+        LabelSymbol l_fin = SymbDistrib.newLabel();
+
+        code = (Code3aGenerator.genLabel(l_deb));
+        code.append(Code3aGenerator.genIfZ(e, l_fin));
+    }
+        st = statement[symTab]
+    {
+        code.append(st);
+        code.append(Code3aGenerator.genGoTo(l_deb));
+        code.append(Code3aGenerator.genLabel(l_fin));
+    }
+    )
+    |
+    b=block[symTab] {
         code = b;
     }
 	;

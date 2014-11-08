@@ -19,4 +19,11 @@
 		a := 4
 	}
 	FI
+	
+	WHILE a
+	DO
+	{
+		a := 0
+	}
+	DONE
 }
