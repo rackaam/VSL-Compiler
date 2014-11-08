@@ -23,7 +23,7 @@
 	WHILE a
 	DO
 	{
-		a := 0
+		a := a - 1
 	}
 	DONE
 }
