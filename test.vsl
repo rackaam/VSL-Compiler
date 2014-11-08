@@ -1,0 +1,22 @@
+{
+	INT a,b,c
+	a := 4
+	c := 0
+	b := a + c
+	{
+		INT a,d
+		a := 2
+		{
+			b := 1
+		}
+	}
+	IF a
+	THEN
+	a := 9
+	ELSE
+	{
+		a := 0
+		a := 4
+	}
+	FI
+}

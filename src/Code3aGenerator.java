@@ -35,4 +35,18 @@ public class Code3aGenerator {
 		return cod;
 	}
 
+	public static Code3a genLabel(LabelSymbol label) {
+		return new Code3a(new Inst3a(Inst3a.TAC.LABEL, label, null, null));
+	}
+
+	public static Code3a genIfZ(ExpAttribute exp, LabelSymbol label) {
+		Code3a code = exp.code;
+		code.append(new Inst3a(Inst3a.TAC.IFZ, exp.place, label, null));
+		return code;
+	}
+
+	public static Code3a genGoTo(LabelSymbol label) {
+		return new Code3a(new Inst3a(Inst3a.TAC.GOTO, label, null, null));
+	}
+
 } // Code3aGenerator ***
