@@ -48,5 +48,13 @@ public class Code3aGenerator {
 	public static Code3a genGoTo(LabelSymbol label) {
 		return new Code3a(new Inst3a(Inst3a.TAC.GOTO, label, null, null));
 	}
+	
+	public static Code3a genArg(Operand3a op) {
+		return new Code3a(new Inst3a(Inst3a.TAC.ARG, op, null, null));
+	}
+	
+	public static Code3a genCall(LabelSymbol label) {
+		return new Code3a(new Inst3a(Inst3a.TAC.CALL, null, label, null));
+	}
 
 } // Code3aGenerator ***

@@ -1,6 +1,7 @@
 {
 	INT a,b,c
 	a := 4
+	PRINT 6 + 1
 	c := 0
 	b := a + c
 	{

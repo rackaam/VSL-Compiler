@@ -65,6 +65,11 @@ statement [SymbolTable symTab] returns [Code3a code]
     }
     )
 |
+	^(PRINT_KW pl = print_list[symTab])
+	{
+		code = pl;
+	}
+|
     b=block[symTab] 
     {
         code = b;
@@ -209,5 +214,38 @@ decl_item [SymbolTable symTab] returns [Code3a code]
 			symTab.insert($IDENT.text, vs);
 			code = Code3aGenerator.genVar(vs);
 		}
+	}
+;
+
+print_list [SymbolTable symTab] returns [Code3a code]
+@init
+{
+    code = new Code3a();
+}
+: 
+    (pi = print_item[symTab]
+    {
+		code.append(pi);
+	}
+	)+
+;
+
+
+print_item [SymbolTable symTab] returns [Code3a code]
+:
+	TEXT
+	{
+		LabelSymbol ls = SymbDistrib.builtinPrintS;
+		Data3a data = new Data3a($TEXT.text);
+		code = Code3aGenerator.genArg(data.getLabel());
+		code.append(Code3aGenerator.genCall(ls));
+	}
+	|
+	e = expression[symTab]
+	{
+		LabelSymbol ls = SymbDistrib.builtinPrintN;
+		code = e.code;
+		code.append(Code3aGenerator.genArg(e.place));
+		code.append(Code3aGenerator.genCall(ls));
 	}
 ;
