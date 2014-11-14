@@ -56,5 +56,9 @@ public class Code3aGenerator {
 	public static Code3a genCall(LabelSymbol label) {
 		return new Code3a(new Inst3a(Inst3a.TAC.CALL, null, label, null));
 	}
+	
+	public static Code3a genCallReturn(Operand3a o, LabelSymbol label) {
+		return new Code3a(new Inst3a(Inst3a.TAC.CALL, o, label, null));
+	}
 
 } // Code3aGenerator ***

@@ -70,6 +70,11 @@ statement [SymbolTable symTab] returns [Code3a code]
 		code = pl;
 	}
 |
+	^(READ_KW rl = read_list[symTab])
+	{
+		code = rl;
+	}
+|
     b=block[symTab] 
     {
         code = b;
@@ -230,7 +235,6 @@ print_list [SymbolTable symTab] returns [Code3a code]
 	)+
 ;
 
-
 print_item [SymbolTable symTab] returns [Code3a code]
 :
 	TEXT
@@ -238,6 +242,7 @@ print_item [SymbolTable symTab] returns [Code3a code]
 		LabelSymbol ls = SymbDistrib.builtinPrintS;
 		Data3a data = new Data3a($TEXT.text);
 		code = Code3aGenerator.genArg(data.getLabel());
+		code.appendData(data);
 		code.append(Code3aGenerator.genCall(ls));
 	}
 	|
@@ -247,5 +252,32 @@ print_item [SymbolTable symTab] returns [Code3a code]
 		code = e.code;
 		code.append(Code3aGenerator.genArg(e.place));
 		code.append(Code3aGenerator.genCall(ls));
+	}
+;
+
+read_list [SymbolTable symTab] returns [Code3a code]
+@init
+{
+    code = new Code3a();
+}
+: 
+    (ri = read_item[symTab]
+    {
+		code.append(ri);
+	}
+	)+
+;
+
+read_item [SymbolTable symTab] returns [Code3a code]
+:
+	IDENT
+	{
+		Operand3a o = symTab.lookup($IDENT.text);
+		if(o == null){
+			System.err.println("Error: variable \"" + $IDENT.text + "\" is not declared.");
+		}else {
+			LabelSymbol ls = SymbDistrib.builtinRead;
+			code = Code3aGenerator.genCallReturn(o, ls);
+		}
 	}
 ;

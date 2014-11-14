@@ -1,7 +1,8 @@
 {
 	INT a,b,c
 	a := 4
-	PRINT 6 + 1
+	PRINT "hello"
+	READ a
 	c := 0
 	b := a + c
 	{
