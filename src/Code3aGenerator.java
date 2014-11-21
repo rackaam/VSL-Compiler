@@ -19,6 +19,10 @@ public class Code3aGenerator {
 		Inst3a i = new Inst3a(Inst3a.TAC.VAR, t, null, null);
 		return new Code3a(i);
 	}
+	
+	public static Code3a genTabVar(VarSymbol temp, Operand3a tab, ExpAttribute exp){
+		return new Code3a(new Inst3a(Inst3a.TAC.TABVAR, temp , tab, exp.place));
+	}
 
 	/**
 	 * Generate code for a binary operation

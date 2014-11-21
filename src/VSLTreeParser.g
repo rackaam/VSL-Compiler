@@ -152,6 +152,23 @@ expression [SymbolTable symTab] returns [ExpAttribute expAtt]
         expAtt = pe; 
     }
 ;
+
+array_elem [SymbolTable symTab] returns [ExpAttribute expAtt]
+:
+	^(ARELEM  IDENT e=expression[symTab])
+	{
+		Operand3a o = symTab.lookup($IDENT.text);
+	    if(o == null){
+	       System.err.println("Error: variable \"" + $IDENT.text + "\" is not declared.");
+	    }
+	    if(!o.isArray()){
+	    	System.err.println("Error: variable \"" + $IDENT.text + "\" is not an array");
+	    }
+		VarSymbol temp = SymbDistrib.newTemp();
+		Code3a code = Code3aGenerator.genTabVar(temp, o, e);
+	    expAtt = new ExpAttribute(o.type, code, temp);
+    }
+;
  
 primary_exp [SymbolTable symTab] returns [ExpAttribute expAtt]
 : 
@@ -169,6 +186,11 @@ primary_exp [SymbolTable symTab] returns [ExpAttribute expAtt]
         }
         expAtt = new ExpAttribute(o.type, new Code3a(), symTab.lookup($IDENT.text));
     }
+|
+	a = array_elem[symTab]
+	{
+		expAtt = a;
+	}
 ;
 
 declaration [SymbolTable symTab] returns [Code3a code]
@@ -214,13 +236,14 @@ decl_item [SymbolTable symTab] returns [Code3a code]
 		if (o != null && o.getScope() == currentScope){
 			System.err.println("Error: variable \"" + $IDENT.text + "\" is already declared.");
 		} else {
-			ArrayType aty = new ArrayType(Type.INT, Integer.parseInt($INTEGER.text));
-			VarSymbol vs = new VarSymbol(aty, $IDENT.text, symTab.getScope());
+			ArrayType at = new ArrayType(Type.INT, Integer.parseInt($INTEGER.text));
+			VarSymbol vs = new VarSymbol(at, $IDENT.text, symTab.getScope());
 			symTab.insert($IDENT.text, vs);
 			code = Code3aGenerator.genVar(vs);
 		}
 	}
 ;
+
 
 print_list [SymbolTable symTab] returns [Code3a code]
 @init

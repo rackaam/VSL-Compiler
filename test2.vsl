@@ -1,0 +1,31 @@
+{
+	INT a,b,c, t[5]
+	a := 4
+	PRINT "hello"
+	READ a
+	c := 0
+	b := a + c
+	{
+		INT a,d
+		a := 2
+		{
+			b := 1
+		}
+	}
+	IF a
+	THEN
+	a := 9
+	ELSE
+	{
+		a := 0
+		a := 4
+	}
+	FI
+	
+	WHILE a
+	DO
+	{
+		a := a - 1
+	}
+	DONE
+}
