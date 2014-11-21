@@ -157,16 +157,7 @@ array_elem [SymbolTable symTab] returns [ExpAttribute expAtt]
 :
 	^(ARELEM  IDENT e=expression[symTab])
 	{
-		Operand3a o = symTab.lookup($IDENT.text);
-	    if(o == null){
-	       System.err.println("Error: variable \"" + $IDENT.text + "\" is not declared.");
-	    }
-	    if(!o.isArray()){
-	    	System.err.println("Error: variable \"" + $IDENT.text + "\" is not an array");
-	    }
-		VarSymbol temp = SymbDistrib.newTemp();
-		Code3a code = Code3aGenerator.genTabVar(temp, o, e);
-	    expAtt = new ExpAttribute(o.type, code, temp);
+		expAtt = TreeParserCode.newArrayElem(symTab, $IDENT.text, e);
     }
 ;
  
