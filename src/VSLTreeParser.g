@@ -13,6 +13,32 @@ s [SymbolTable symTab] returns [Code3a code]
         code = st; 
     }
 ;
+
+
+param [SymbolTable symTab] returns [VarSymbol vs]
+:	IDENT
+    {
+        vs = TreeParserCode.newVarParam(symTab, $IDENT.text);
+    }
+    |
+    ^(ARRAY IDENT)
+    {
+        vs = TreeParserCode.newArrayParam(symTab, $IDENT.text);
+    }
+;
+
+param_list [SymbolTable symTab] returns [List<VarSymbol> list_vs]
+@init 
+{ 
+	list_vs = new ArrayList<VarSymbol>(); 
+}
+: ^(PARAM (p = param[symTab] 
+{ 
+	list_vs.add(p); 
+}
+)*)
+;
+
   
 statement [SymbolTable symTab] returns [Code3a code]
 : 

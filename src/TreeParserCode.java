@@ -19,5 +19,19 @@ public class TreeParserCode {
 			return new ArrayAttribute(o, e, exp);
 		}
 	}
+	
+	public static VarSymbol newVarParam(SymbolTable symTab, String ident){
+		VarSymbol vs = new VarSymbol(Type.INT, ident, symTab.getScope());
+		vs.setParam();
+		return vs;
+	}
+	
+	public static VarSymbol newArrayParam(SymbolTable symTab, String ident){
+		VarSymbol vs = new VarSymbol(Type.POINTER, ident, symTab.getScope());
+		vs.setParam();
+		return vs;
+	}
+	
+	
 
 }
