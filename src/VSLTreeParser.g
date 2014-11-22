@@ -16,7 +16,8 @@ s [SymbolTable symTab] returns [Code3a code]
 
 
 param [SymbolTable symTab] returns [VarSymbol vs]
-:	IDENT
+:	
+	IDENT
     {
         vs = TreeParserCode.newVarParam(symTab, $IDENT.text);
     }
@@ -32,11 +33,33 @@ param_list [SymbolTable symTab] returns [List<VarSymbol> list_vs]
 { 
 	list_vs = new ArrayList<VarSymbol>(); 
 }
-: ^(PARAM (p = param[symTab] 
+: 
+	^(PARAM (p = param[symTab] 
 { 
 	list_vs.add(p); 
 }
 )*)
+;
+
+type returns [Type t]
+: 
+	INT_KW 
+{
+	t = Type.INT;
+}
+| 
+	VOID_KW 
+{
+	t = Type.VOID;
+}
+;
+
+proto[SymbolTable symTab] returns [Code3a code]
+:
+    ^( PROTO_KW t=type IDENT params=param_list[symTab])
+    {
+        code = TreeParserCode.newProto(symTab, t, $IDENT.text, params);
+    }
 ;
 
   

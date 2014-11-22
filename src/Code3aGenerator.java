@@ -71,4 +71,12 @@ public class Code3aGenerator {
 		return new Code3a(new Inst3a(Inst3a.TAC.CALL, o, label, null));
 	}
 
+	public static Code3a genBeginFunc() {
+		return new Code3a(new Inst3a(Inst3a.TAC.BEGINFUNC, null, null, null));
+	}
+
+	public static Code3a genEndFunc() {
+		return new Code3a(new Inst3a(Inst3a.TAC.ENDFUNC, null, null, null));
+	}
+
 } // Code3aGenerator ***
