@@ -23,6 +23,11 @@ public class Code3aGenerator {
 	public static Code3a genTabVar(VarSymbol temp, Operand3a tab, ExpAttribute exp){
 		return new Code3a(new Inst3a(Inst3a.TAC.TABVAR, temp , tab, exp.place));
 	}
+	
+	//PROBLEME=>ARRAY ELEM ne contient pas l'ident=>creation tabAttribute?
+//	public static Code3a genVarTab(ExpAttribute arrayElem, ExpAttribute exp2){
+//		return new Code3a(new Inst3a(Inst3a.TAC.VARTAB, arrayElem.place , arrayElem., exp2.place));
+//	}
 
 	/**
 	 * Generate code for a binary operation

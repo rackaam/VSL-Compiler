@@ -27,7 +27,7 @@ statement [SymbolTable symTab] returns [Code3a code]
             System.err.println("Error: variable \"" + $IDENT.text + "\" is not declared.");
         }
     }
-| 
+|
     ^( IF_KW  e=expression[symTab] 
     {
         LabelSymbol l_else = SymbDistrib.newLabel();
@@ -153,11 +153,11 @@ expression [SymbolTable symTab] returns [ExpAttribute expAtt]
     }
 ;
 
-array_elem [SymbolTable symTab] returns [ExpAttribute expAtt]
+array_elem [SymbolTable symTab] returns [ArrayAttribute arrAtt]
 :
 	^(ARELEM  IDENT e=expression[symTab])
 	{
-		expAtt = TreeParserCode.newArrayElem(symTab, $IDENT.text, e);
+		arrAtt = TreeParserCode.newArrayElem(symTab, $IDENT.text, e);
     }
 ;
  
@@ -180,7 +180,7 @@ primary_exp [SymbolTable symTab] returns [ExpAttribute expAtt]
 |
 	a = array_elem[symTab]
 	{
-		expAtt = a;
+		expAtt = a.exp;
 	}
 ;
 
