@@ -16,19 +16,8 @@ public class TreeParserCode {
 			VarSymbol temp = SymbDistrib.newTemp();
 			Code3a code = Code3aGenerator.genTabVar(temp, o, e);
 			ExpAttribute exp = new ExpAttribute(o.type, code, temp);
-			return new ArrayAttribute(ident, e, exp);
+			return new ArrayAttribute(o, e, exp);
 		}
 	}
-//	
-//	public static Code3a assignExpToArrayElem(SymbolTable symTab, ExpAttribute arrayElem, 
-//			ExpAttribute e){
-//			Code3a code = Code3aGenerator.genVarTab(arrayElem., e, e);
-//			return new ExpAttribute(o.type, code, temp);
-//		}
-//	}
-//	^(ASSIGN_KW expression array_elem)
-//	{
-//		
-//	} 
-//|
+
 }

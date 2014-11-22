@@ -19,15 +19,16 @@ public class Code3aGenerator {
 		Inst3a i = new Inst3a(Inst3a.TAC.VAR, t, null, null);
 		return new Code3a(i);
 	}
-	
-	public static Code3a genTabVar(VarSymbol temp, Operand3a tab, ExpAttribute exp){
-		return new Code3a(new Inst3a(Inst3a.TAC.TABVAR, temp , tab, exp.place));
+
+	public static Code3a genTabVar(VarSymbol temp, Operand3a tab,
+			ExpAttribute exp) {
+		return new Code3a(new Inst3a(Inst3a.TAC.TABVAR, temp, tab, exp.place));
 	}
-	
-	//PROBLEME=>ARRAY ELEM ne contient pas l'ident=>creation tabAttribute?
-//	public static Code3a genVarTab(ExpAttribute arrayElem, ExpAttribute exp2){
-//		return new Code3a(new Inst3a(Inst3a.TAC.VARTAB, arrayElem.place , arrayElem., exp2.place));
-//	}
+
+	public static Code3a genVarTab(ArrayAttribute arrayElem, ExpAttribute exp) {
+		return new Code3a(new Inst3a(Inst3a.TAC.VARTAB, arrayElem.place,
+				arrayElem.index.place, exp.place));
+	}
 
 	/**
 	 * Generate code for a binary operation
@@ -57,15 +58,15 @@ public class Code3aGenerator {
 	public static Code3a genGoTo(LabelSymbol label) {
 		return new Code3a(new Inst3a(Inst3a.TAC.GOTO, label, null, null));
 	}
-	
+
 	public static Code3a genArg(Operand3a op) {
 		return new Code3a(new Inst3a(Inst3a.TAC.ARG, op, null, null));
 	}
-	
+
 	public static Code3a genCall(LabelSymbol label) {
 		return new Code3a(new Inst3a(Inst3a.TAC.CALL, null, label, null));
 	}
-	
+
 	public static Code3a genCallReturn(Operand3a o, LabelSymbol label) {
 		return new Code3a(new Inst3a(Inst3a.TAC.CALL, o, label, null));
 	}

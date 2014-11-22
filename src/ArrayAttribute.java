@@ -1,20 +1,19 @@
-
 public class ArrayAttribute {
 
-	public String ident;
+	public Operand3a place;
 	public ExpAttribute index;
 	public ExpAttribute exp;
-	
+
 	/**
 	 * 
-	 * @param ident Array's name
-	 * @param index 
+	 * @param ident
+	 * @param index
 	 * @param exp
 	 */
-	public ArrayAttribute(String ident, ExpAttribute index, ExpAttribute exp){
-		this.ident = ident;
+	public ArrayAttribute(Operand3a place, ExpAttribute index, ExpAttribute exp) {
+		this.place = place;
 		this.index = index;
 		this.exp = exp;
 	}
-	
+
 }

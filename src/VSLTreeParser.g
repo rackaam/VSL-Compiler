@@ -16,17 +16,28 @@ s [SymbolTable symTab] returns [Code3a code]
   
 statement [SymbolTable symTab] returns [Code3a code]
 : 
-    ^(ASSIGN_KW e=expression[symTab] IDENT) 
-    {
-        Operand3a id = symTab.lookup($IDENT.text);
-        if (id != null) {
-            code = e.code;
-            code.append(new Code3a(new Inst3a(Inst3a.TAC.COPY, id, e.place, null)));
-        }
-        else {
-            System.err.println("Error: variable \"" + $IDENT.text + "\" is not declared.");
-        }
-    }
+    ^(ASSIGN_KW e=expression[symTab] (
+    (	IDENT 
+	    {
+	        Operand3a id = symTab.lookup($IDENT.text);
+	        if (id != null) {
+	            code = e.code;
+	            code.append(new Code3a(new Inst3a(Inst3a.TAC.COPY, id, e.place, null)));
+	        }
+	        else {
+	            System.err.println("Error: variable \"" + $IDENT.text + "\" is not declared.");
+	        }
+	    }
+    )
+	|
+	(
+		arrayElem=array_elem[symTab])
+		{
+			code = e.code;
+			code.append(Code3aGenerator.genVarTab(arrayElem, e));
+		}
+	) 
+	)
 |
     ^( IF_KW  e=expression[symTab] 
     {
