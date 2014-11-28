@@ -1,3 +1,5 @@
+PROTO VOID main()
+FUNC VOID main()
 {
 	INT a,b,c, t[5]
 	a := 4

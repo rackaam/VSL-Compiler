@@ -38,7 +38,7 @@ public class VslComp {
 		try {
 			// We give the file as input for ANTLR, which produces a character
 			// stream.
-			ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/test.vsl");
+			ANTLRFileStream input = new ANTLRFileStream("/private/student/0/80/15005180/VSL-Compiler/tests/testlevel4/level4testfact.vsl");
 			// Then, we run the lexer...
 			VSLLexer lexer = new VSLLexer(input);
 			// To obtain a token stream.
@@ -50,7 +50,7 @@ public class VslComp {
 			// currently 'expression'.
 			// *** NOTE: the following line must be changed whenever the main
 			// rule in VSLTreeParser.g is modified. ***
-			VSLParser.block_return r = parser.block();
+			VSLParser.s_return r = parser.s();
 			// The parser produces an AST.
 			CommonTree t = (CommonTree) r.getTree();
 			// If debugging is on, this prints the resulting tree in LISP
@@ -64,7 +64,7 @@ public class VslComp {
 				// The tree parser starts in the rule defined by the next line.
 				// *** NOTE: the following line must be changed whenever the
 				// top-level rule is modified. ***
-				Code3a code = tparser.block(new SymbolTable());
+				Code3a code = tparser.program(new SymbolTable());
 				code.print();
 
 				// We prepare the MIPS code generator, which will compile
