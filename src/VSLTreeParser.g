@@ -1,6 +1,7 @@
 tree grammar VSLTreeParser;
 
-options {
+options 
+{
   language     = Java;
   tokenVocab   = VSLParser;
   ASTLabelType = CommonTree;
@@ -61,6 +62,48 @@ proto[SymbolTable symTab] returns [Code3a code]
         code = TreeParserCode.newProto(symTab, t, $IDENT.text, params);
     }
 ;
+
+function[SymbolTable symTab] returns [Code3a code]
+:
+    ^( FUNC_KW returnType=type IDENT params=param_list[symTab] ^(BODY st=statement[symTab])
+    {
+        Operand3a func = symTab.lookup($IDENT.text);
+        if(func == null){
+            // todo
+            System.err.println("pas de proto défini");
+        }else {
+            FunctionType ft = (FunctionType)func.type;
+
+            if(ft.prototype == false){
+                System.err.println("Fonction déjà définie");
+            }else{
+                LabelSymbol ls = new LabelSymbol($IDENT.text);
+                FunctionType newFt = new FunctionType(returnType, false);
+                for (VarSymbol vs : params)
+                    newFt.extend(vs.type);
+                FunctionSymbol fs = new FunctionSymbol(ls, newFt);
+                func = fs;
+            }
+        }
+        code = Code3aGenerator.genLabel((LabelSymbol)func);
+        code.append(Code3aGenerator.genBeginFunc());
+        symTab.enterScope();
+
+        for(VarSymbol vs : params){
+            Operand3a o = symTab.lookup(vs.name);
+            if(o != null && o.getScope() == symTab.getScope()){
+                System.err.println("deux paramètres ont le même nom");
+            }
+            symTab.insert(vs.name, vs);
+            code.append(Code3aGenerator.genVar(vs));
+        }
+
+        code.append(st);
+        symTab.leaveScope();
+        code.append(Code3aGenerator.genEndFunc());
+    })
+;
+
 
   
 statement [SymbolTable symTab] returns [Code3a code]
