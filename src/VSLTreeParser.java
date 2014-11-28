@@ -1,4 +1,4 @@
-// $ANTLR 3.5.2 VSLTreeParser.g 2014-11-28 22:00:59
+// $ANTLR 3.5.2 VSLTreeParser.g 2014-11-28 22:08:36
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
@@ -1307,8 +1307,8 @@ public class VSLTreeParser extends TreeParser {
 		ExpAttribute e =null;
 
 
-		    code = new Code3a();
-		    ft = new FunctionType(Type.INT, false);
+		    retval.code = new Code3a();
+		    retval.ft = new FunctionType(Type.INT, false);
 
 		try {
 			// VSLTreeParser.g:312:5: ( (e= expression[symTab] )+ )
@@ -1333,9 +1333,9 @@ public class VSLTreeParser extends TreeParser {
 					state._fsp--;
 
 
-					        ft.extend(Type.INT);
-					        code.append(e.code);
-					        code.append(Code3aGenerator.genArg(e.place));
+					        retval.ft.extend(Type.INT);
+					        retval.code.append(e.code);
+					        retval.code.append(Code3aGenerator.genArg(e.place));
 					    
 					}
 					break;

@@ -306,14 +306,14 @@ primary_exp [SymbolTable symTab] returns [ExpAttribute expAtt]
 argument_list[SymbolTable symTab] returns [Code3a code, FunctionType ft]
 @init
 {
-    code = new Code3a();
-    ft = new FunctionType(Type.INT, false);
+    $code = new Code3a();
+    $ft = new FunctionType(Type.INT, false);
 }
 :   (e=expression[symTab]
     {
-        ft.extend(Type.INT);
-        code.append(e.code);
-        code.append(Code3aGenerator.genArg(e.place));
+        $ft.extend(Type.INT);
+        $code.append(e.code);
+        $code.append(Code3aGenerator.genArg(e.place));
     }
     )+
 ;
