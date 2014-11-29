@@ -1,4 +1,4 @@
-// $ANTLR 3.5.2 VSLTreeParser.g 2014-11-29 19:50:42
+// $ANTLR 3.5.2 VSLTreeParser.g 2014-11-29 22:45:46
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
@@ -645,7 +645,7 @@ public class VSLTreeParser extends TreeParser {
 
 
 										code = e.code;
-										code.append(Code3aGenerator.genVarTab(arrayElem, (VarSymbol)e.place));
+										code.append(Code3aGenerator.genVarTab(arrayElem, e.place));
 									
 							}
 							break;
@@ -792,18 +792,17 @@ public class VSLTreeParser extends TreeParser {
 					match(input, Token.UP, null); 
 
 
-					        code = e.code;
-					        code.append(new Inst3a(Inst3a.TAC.RETURN, e.place, null, null));
+					        code = Code3aGenerator.genReturn(e);
 					    
 					}
 					break;
 				case 8 :
-					// VSLTreeParser.g:179:5: ^( FCALL_S IDENT (al= argument_list[symTab] )? )
+					// VSLTreeParser.g:178:5: ^( FCALL_S IDENT (al= argument_list[symTab] )? )
 					{
 					match(input,FCALL_S,FOLLOW_FCALL_S_in_statement660); 
 					match(input, Token.DOWN, null); 
 					IDENT6=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_statement662); 
-					// VSLTreeParser.g:179:21: (al= argument_list[symTab] )?
+					// VSLTreeParser.g:178:21: (al= argument_list[symTab] )?
 					int alt8=2;
 					int LA8_0 = input.LA(1);
 					if ( (LA8_0==DIV||LA8_0==IDENT||LA8_0==INTEGER||(LA8_0 >= MINUS && LA8_0 <= MUL)||LA8_0==PLUS||LA8_0==ARELEM||LA8_0==FCALL) ) {
@@ -811,7 +810,7 @@ public class VSLTreeParser extends TreeParser {
 					}
 					switch (alt8) {
 						case 1 :
-							// VSLTreeParser.g:179:22: al= argument_list[symTab]
+							// VSLTreeParser.g:178:22: al= argument_list[symTab]
 							{
 							pushFollow(FOLLOW_argument_list_in_statement667);
 							al=argument_list(symTab);
@@ -846,7 +845,7 @@ public class VSLTreeParser extends TreeParser {
 
 
 	// $ANTLR start "block"
-	// VSLTreeParser.g:185:1: block[SymbolTable symTab] returns [Code3a code] : ( ^( BLOCK d= declaration[symTab] il= inst_list[symTab] ) | ^( BLOCK il= inst_list[symTab] ) );
+	// VSLTreeParser.g:184:1: block[SymbolTable symTab] returns [Code3a code] : ( ^( BLOCK d= declaration[symTab] il= inst_list[symTab] ) | ^( BLOCK il= inst_list[symTab] ) );
 	public final Code3a block(SymbolTable symTab) throws RecognitionException {
 		Code3a code = null;
 
@@ -855,7 +854,7 @@ public class VSLTreeParser extends TreeParser {
 		Code3a il =null;
 
 		try {
-			// VSLTreeParser.g:186:5: ( ^( BLOCK d= declaration[symTab] il= inst_list[symTab] ) | ^( BLOCK il= inst_list[symTab] ) )
+			// VSLTreeParser.g:185:5: ( ^( BLOCK d= declaration[symTab] il= inst_list[symTab] ) | ^( BLOCK il= inst_list[symTab] ) )
 			int alt10=2;
 			int LA10_0 = input.LA(1);
 			if ( (LA10_0==BLOCK) ) {
@@ -907,7 +906,7 @@ public class VSLTreeParser extends TreeParser {
 
 			switch (alt10) {
 				case 1 :
-					// VSLTreeParser.g:187:5: ^( BLOCK d= declaration[symTab] il= inst_list[symTab] )
+					// VSLTreeParser.g:186:5: ^( BLOCK d= declaration[symTab] il= inst_list[symTab] )
 					{
 					match(input,BLOCK,FOLLOW_BLOCK_in_block698); 
 
@@ -932,7 +931,7 @@ public class VSLTreeParser extends TreeParser {
 					}
 					break;
 				case 2 :
-					// VSLTreeParser.g:198:5: ^( BLOCK il= inst_list[symTab] )
+					// VSLTreeParser.g:197:5: ^( BLOCK il= inst_list[symTab] )
 					{
 					match(input,BLOCK,FOLLOW_BLOCK_in_block741); 
 					match(input, Token.DOWN, null); 
@@ -964,7 +963,7 @@ public class VSLTreeParser extends TreeParser {
 
 
 	// $ANTLR start "inst_list"
-	// VSLTreeParser.g:204:1: inst_list[SymbolTable symTab] returns [Code3a code] : ^( INST (st= statement[symTab] )+ ) ;
+	// VSLTreeParser.g:203:1: inst_list[SymbolTable symTab] returns [Code3a code] : ^( INST (st= statement[symTab] )+ ) ;
 	public final Code3a inst_list(SymbolTable symTab) throws RecognitionException {
 		Code3a code = null;
 
@@ -975,12 +974,12 @@ public class VSLTreeParser extends TreeParser {
 		    code = new Code3a();
 
 		try {
-			// VSLTreeParser.g:209:5: ( ^( INST (st= statement[symTab] )+ ) )
-			// VSLTreeParser.g:210:5: ^( INST (st= statement[symTab] )+ )
+			// VSLTreeParser.g:208:5: ( ^( INST (st= statement[symTab] )+ ) )
+			// VSLTreeParser.g:209:5: ^( INST (st= statement[symTab] )+ )
 			{
 			match(input,INST,FOLLOW_INST_in_inst_list780); 
 			match(input, Token.DOWN, null); 
-			// VSLTreeParser.g:210:12: (st= statement[symTab] )+
+			// VSLTreeParser.g:209:12: (st= statement[symTab] )+
 			int cnt11=0;
 			loop11:
 			while (true) {
@@ -992,7 +991,7 @@ public class VSLTreeParser extends TreeParser {
 
 				switch (alt11) {
 				case 1 :
-					// VSLTreeParser.g:210:13: st= statement[symTab]
+					// VSLTreeParser.g:209:13: st= statement[symTab]
 					{
 					pushFollow(FOLLOW_statement_in_inst_list785);
 					st=statement(symTab);
@@ -1031,7 +1030,7 @@ public class VSLTreeParser extends TreeParser {
 
 
 	// $ANTLR start "expression"
-	// VSLTreeParser.g:217:1: expression[SymbolTable symTab] returns [ExpAttribute expAtt] : ( ^( PLUS e1= expression[symTab] e2= expression[symTab] ) | ^( MINUS e1= expression[symTab] e2= expression[symTab] ) | ^( MUL e1= expression[symTab] e2= expression[symTab] ) | ^( DIV e1= expression[symTab] e2= expression[symTab] ) |pe= primary_exp[symTab] );
+	// VSLTreeParser.g:216:1: expression[SymbolTable symTab] returns [ExpAttribute expAtt] : ( ^( PLUS e1= expression[symTab] e2= expression[symTab] ) | ^( MINUS e1= expression[symTab] e2= expression[symTab] ) | ^( MUL e1= expression[symTab] e2= expression[symTab] ) | ^( DIV e1= expression[symTab] e2= expression[symTab] ) |pe= primary_exp[symTab] );
 	public final ExpAttribute expression(SymbolTable symTab) throws RecognitionException {
 		ExpAttribute expAtt = null;
 
@@ -1041,7 +1040,7 @@ public class VSLTreeParser extends TreeParser {
 		ExpAttribute pe =null;
 
 		try {
-			// VSLTreeParser.g:218:5: ( ^( PLUS e1= expression[symTab] e2= expression[symTab] ) | ^( MINUS e1= expression[symTab] e2= expression[symTab] ) | ^( MUL e1= expression[symTab] e2= expression[symTab] ) | ^( DIV e1= expression[symTab] e2= expression[symTab] ) |pe= primary_exp[symTab] )
+			// VSLTreeParser.g:217:5: ( ^( PLUS e1= expression[symTab] e2= expression[symTab] ) | ^( MINUS e1= expression[symTab] e2= expression[symTab] ) | ^( MUL e1= expression[symTab] e2= expression[symTab] ) | ^( DIV e1= expression[symTab] e2= expression[symTab] ) |pe= primary_exp[symTab] )
 			int alt12=5;
 			switch ( input.LA(1) ) {
 			case PLUS:
@@ -1079,7 +1078,7 @@ public class VSLTreeParser extends TreeParser {
 			}
 			switch (alt12) {
 				case 1 :
-					// VSLTreeParser.g:219:5: ^( PLUS e1= expression[symTab] e2= expression[symTab] )
+					// VSLTreeParser.g:218:5: ^( PLUS e1= expression[symTab] e2= expression[symTab] )
 					{
 					match(input,PLUS,FOLLOW_PLUS_in_expression822); 
 					match(input, Token.DOWN, null); 
@@ -1102,7 +1101,7 @@ public class VSLTreeParser extends TreeParser {
 					}
 					break;
 				case 2 :
-					// VSLTreeParser.g:227:5: ^( MINUS e1= expression[symTab] e2= expression[symTab] )
+					// VSLTreeParser.g:226:5: ^( MINUS e1= expression[symTab] e2= expression[symTab] )
 					{
 					match(input,MINUS,FOLLOW_MINUS_in_expression853); 
 					match(input, Token.DOWN, null); 
@@ -1125,7 +1124,7 @@ public class VSLTreeParser extends TreeParser {
 					}
 					break;
 				case 3 :
-					// VSLTreeParser.g:235:5: ^( MUL e1= expression[symTab] e2= expression[symTab] )
+					// VSLTreeParser.g:234:5: ^( MUL e1= expression[symTab] e2= expression[symTab] )
 					{
 					match(input,MUL,FOLLOW_MUL_in_expression884); 
 					match(input, Token.DOWN, null); 
@@ -1148,7 +1147,7 @@ public class VSLTreeParser extends TreeParser {
 					}
 					break;
 				case 4 :
-					// VSLTreeParser.g:243:5: ^( DIV e1= expression[symTab] e2= expression[symTab] )
+					// VSLTreeParser.g:242:5: ^( DIV e1= expression[symTab] e2= expression[symTab] )
 					{
 					match(input,DIV,FOLLOW_DIV_in_expression915); 
 					match(input, Token.DOWN, null); 
@@ -1171,7 +1170,7 @@ public class VSLTreeParser extends TreeParser {
 					}
 					break;
 				case 5 :
-					// VSLTreeParser.g:251:5: pe= primary_exp[symTab]
+					// VSLTreeParser.g:250:5: pe= primary_exp[symTab]
 					{
 					pushFollow(FOLLOW_primary_exp_in_expression950);
 					pe=primary_exp(symTab);
@@ -1199,7 +1198,7 @@ public class VSLTreeParser extends TreeParser {
 
 
 	// $ANTLR start "array_elem"
-	// VSLTreeParser.g:257:1: array_elem[SymbolTable symTab] returns [ArrayAttribute arrAtt] : ^( ARELEM IDENT e= expression[symTab] ) ;
+	// VSLTreeParser.g:256:1: array_elem[SymbolTable symTab] returns [ArrayAttribute arrAtt] : ^( ARELEM IDENT e= expression[symTab] ) ;
 	public final ArrayAttribute array_elem(SymbolTable symTab) throws RecognitionException {
 		ArrayAttribute arrAtt = null;
 
@@ -1208,8 +1207,8 @@ public class VSLTreeParser extends TreeParser {
 		ExpAttribute e =null;
 
 		try {
-			// VSLTreeParser.g:258:2: ( ^( ARELEM IDENT e= expression[symTab] ) )
-			// VSLTreeParser.g:259:2: ^( ARELEM IDENT e= expression[symTab] )
+			// VSLTreeParser.g:257:2: ( ^( ARELEM IDENT e= expression[symTab] ) )
+			// VSLTreeParser.g:258:2: ^( ARELEM IDENT e= expression[symTab] )
 			{
 			match(input,ARELEM,FOLLOW_ARELEM_in_array_elem975); 
 			match(input, Token.DOWN, null); 
@@ -1240,7 +1239,7 @@ public class VSLTreeParser extends TreeParser {
 
 
 	// $ANTLR start "primary_exp"
-	// VSLTreeParser.g:265:1: primary_exp[SymbolTable symTab] returns [ExpAttribute expAtt] : ( INTEGER | IDENT |a= array_elem[symTab] | ^( FCALL IDENT (al= argument_list[symTab] )? ) );
+	// VSLTreeParser.g:264:1: primary_exp[SymbolTable symTab] returns [ExpAttribute expAtt] : ( INTEGER | IDENT |a= array_elem[symTab] | ^( FCALL IDENT (al= argument_list[symTab] )? ) );
 	public final ExpAttribute primary_exp(SymbolTable symTab) throws RecognitionException {
 		ExpAttribute expAtt = null;
 
@@ -1252,7 +1251,7 @@ public class VSLTreeParser extends TreeParser {
 		TreeRuleReturnScope al =null;
 
 		try {
-			// VSLTreeParser.g:266:5: ( INTEGER | IDENT |a= array_elem[symTab] | ^( FCALL IDENT (al= argument_list[symTab] )? ) )
+			// VSLTreeParser.g:265:5: ( INTEGER | IDENT |a= array_elem[symTab] | ^( FCALL IDENT (al= argument_list[symTab] )? ) )
 			int alt14=4;
 			switch ( input.LA(1) ) {
 			case INTEGER:
@@ -1282,7 +1281,7 @@ public class VSLTreeParser extends TreeParser {
 			}
 			switch (alt14) {
 				case 1 :
-					// VSLTreeParser.g:267:5: INTEGER
+					// VSLTreeParser.g:266:5: INTEGER
 					{
 					INTEGER8=(CommonTree)match(input,INTEGER,FOLLOW_INTEGER_in_primary_exp1008); 
 
@@ -1292,13 +1291,14 @@ public class VSLTreeParser extends TreeParser {
 					}
 					break;
 				case 2 :
-					// VSLTreeParser.g:273:5: IDENT
+					// VSLTreeParser.g:272:5: IDENT
 					{
 					IDENT9=(CommonTree)match(input,IDENT,FOLLOW_IDENT_in_primary_exp1023); 
 
 					        Operand3a o = symTab.lookup((IDENT9!=null?IDENT9.getText():null));
 					        if(o == null){
 					           System.err.println("Error: variable \"" + (IDENT9!=null?IDENT9.getText():null) + "\" is not declared.");
+					           System.exit(-1);
 					        }
 					        expAtt = new ExpAttribute(o.type, new Code3a(), symTab.lookup((IDENT9!=null?IDENT9.getText():null)));
 					    
@@ -1404,7 +1404,7 @@ public class VSLTreeParser extends TreeParser {
 					state._fsp--;
 
 
-					        retval.args.add(Type.INT);
+					        retval.args.add(e.type);
 					        retval.code.append(e.code);
 					        retval.code.append(Code3aGenerator.genArg(e.place));
 					    

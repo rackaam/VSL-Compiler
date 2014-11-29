@@ -114,7 +114,7 @@ statement [SymbolTable symTab] returns [Code3a code]
 		arrayElem=array_elem[symTab])
 		{
 			code = e.code;
-			code.append(Code3aGenerator.genVarTab(arrayElem, (VarSymbol)e.place));
+			code.append(Code3aGenerator.genVarTab(arrayElem, e.place));
 		}
 	) 
 	)
@@ -172,8 +172,7 @@ statement [SymbolTable symTab] returns [Code3a code]
     }
 |   ^(RETURN_KW e = expression[symTab])
     {
-        code = e.code;
-        code.append(new Inst3a(Inst3a.TAC.RETURN, e.place, null, null));
+        code = Code3aGenerator.genReturn(e);
     }
 | 
     ^(FCALL_S IDENT (al=argument_list[symTab])?)
@@ -275,6 +274,7 @@ primary_exp [SymbolTable symTab] returns [ExpAttribute expAtt]
         Operand3a o = symTab.lookup($IDENT.text);
         if(o == null){
            System.err.println("Error: variable \"" + $IDENT.text + "\" is not declared.");
+           System.exit(-1);
         }
         expAtt = new ExpAttribute(o.type, new Code3a(), symTab.lookup($IDENT.text));
     }
@@ -298,7 +298,7 @@ argument_list[SymbolTable symTab] returns [Code3a code, List<Type> args]
 }
 :   (e=expression[symTab]
     {
-        $args.add(Type.INT);
+        $args.add(e.type);
         $code.append(e.code);
         $code.append(Code3aGenerator.genArg(e.place));
     }

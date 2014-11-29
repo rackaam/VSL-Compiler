@@ -27,7 +27,7 @@ public class Code3aGenerator {
 		return new Code3a(new Inst3a(Inst3a.TAC.TABVAR, temp, tab, exp.place));
 	}
 
-	public static Code3a genVarTab(ArrayAttribute arrayElem, VarSymbol value) {
+	public static Code3a genVarTab(ArrayAttribute arrayElem, Operand3a value) {
 		return new Code3a(new Inst3a(Inst3a.TAC.VARTAB, arrayElem.place,
 				arrayElem.index.place, value));
 	}
@@ -107,6 +107,7 @@ public class Code3aGenerator {
 		if (o != null && o.getScope() == currentScope) {
 			System.err.println("Error: variable \"" + name
 					+ "\" is already declared.");
+			System.exit(-1);
 		} else {
 			ArrayType at = new ArrayType(Type.INT, size);
 			VarSymbol vs = new VarSymbol(at, name, symTab.getScope());
@@ -122,11 +123,13 @@ public class Code3aGenerator {
 		if (o == null) {
 			System.err.println("Error: variable \"" + ident
 					+ "\" is not declared.");
+			System.exit(-1);
 			return null;
 		}
 		if (!o.isArray()) {
 			System.err.println("Error: variable \"" + ident
 					+ "\" is not an array");
+			System.exit(-1);
 			return null;
 		} else {
 			VarSymbol temp = SymbDistrib.newTemp();
@@ -147,17 +150,42 @@ public class Code3aGenerator {
 		vs.setParam();
 		return vs;
 	}
-	
-	public static Code3a assignExp(SymbolTable symTab, String varName, ExpAttribute e){
+
+	public static Code3a assignExp(SymbolTable symTab, String varName,
+			ExpAttribute e) {
 		Code3a code = null;
-		Operand3a id = symTab.lookup(varName);
-        if (id != null) {
-            code = e.code;
-            code.append(new Code3a(new Inst3a(Inst3a.TAC.COPY, id, e.place, null)));
-        }
-        else {
-            System.err.println("Error: variable " + varName + " is not declared.");
-        }
+		Operand3a o = symTab.lookup(varName);
+		if (o != null) {
+			if (o.type.isCompatible((e.place.type))
+					|| (o.type.equals(Type.INT) && e.place.type
+							.equals(Type.I_CONST))) { // dirty hack
+				code = e.code;
+				code.append(new Code3a(new Inst3a(Inst3a.TAC.COPY, o, e.place,
+						null)));
+			} else {
+				System.err.println("Error: returnType of the expression and "
+						+ varName + " are different : " + o.type + " / "
+						+ e.place.type);
+				System.exit(-1);
+			}
+		} else {
+			System.err.println("Error: variable " + varName
+					+ " is not declared.");
+			System.exit(-1);
+		}
+		return code;
+	}
+
+	public static Code3a genReturn(ExpAttribute e) {
+		Code3a code = null;
+		if (e.place.type.equals(Type.INT) || e.place.type.equals(Type.I_CONST)) {
+			code = e.code;
+			code.append(new Inst3a(Inst3a.TAC.RETURN, e.place, null, null));
+		} else {
+			System.err.println("Error: " + e.place.type
+					+ " cannot be the type of return.");
+			System.exit(-1);
+		}
 		return code;
 	}
 
@@ -189,8 +217,18 @@ public class Code3aGenerator {
 			List<Type> expectedArgs = ((FunctionType) o.type).getArguments();
 			if ((alr == null && expectedArgs == null)
 					|| (alr == null && expectedArgs.size() == 0)
-					|| (expectedArgs.size() == alr.args.size())) {
-				// todo verifier le type des arguments
+					|| (alr != null && expectedArgs.size() == alr.args.size())) {
+				for (int i = 0; i < expectedArgs.size(); i++) {
+					Type expectedArgType = expectedArgs.get(i);
+					Type functionArgType = alr.args.get(i);
+					if ((expectedArgType != functionArgType || expectedArgType instanceof ArrayType != functionArgType instanceof ArrayType)
+							&& !(expectedArgType.toString().contains("POINTER") && functionArgType instanceof ArrayType)) { // dirty
+
+						System.err.println("Error: Argument n°" + i + " of "
+								+ functionName + " has not the right type");
+						System.exit(-1);
+					}
+				}
 				code = new Code3a();
 				if (alr != null)
 					code.append(alr.code);
@@ -221,8 +259,18 @@ public class Code3aGenerator {
 			List<Type> expectedArgs = ((FunctionType) o.type).getArguments();
 			if ((alr == null && expectedArgs == null)
 					|| (alr == null && expectedArgs.size() == 0)
-					|| (expectedArgs.size() == alr.args.size())) {
-				// todo verifier le type des arguments
+					|| (alr != null && expectedArgs.size() == alr.args.size())) {
+				for (int i = 0; i < expectedArgs.size(); i++) {
+					Type expectedArgType = expectedArgs.get(i);
+					Type functionArgType = alr.args.get(i);
+					if ((expectedArgType != functionArgType || expectedArgType instanceof ArrayType != functionArgType instanceof ArrayType)
+							&& !(expectedArgType.toString().contains("POINTER") && functionArgType instanceof ArrayType)) { // dirty
+
+						System.err.println("Error: Argument n°" + i + " of "
+								+ functionName + " has not the right type");
+						System.exit(-1);
+					}
+				}
 				Type ty = o.type;
 				VarSymbol temp = SymbDistrib.newTemp();
 				Code3a code = new Code3a();
@@ -242,36 +290,58 @@ public class Code3aGenerator {
 		}
 		return expAtt;
 	}
-	
-	public static Code3a genFunctionHeader(SymbolTable symTab, String name, Type returnType, List<VarSymbol> params){
+
+	public static Code3a genFunctionHeader(SymbolTable symTab, String name,
+			Type returnType, List<VarSymbol> params) {
 		Code3a code = null;
 		Operand3a func = symTab.lookup(name);
-       	if(func != null){
-        	FunctionType ft = (FunctionType)func.type;
-        	if(ft.prototype == false){
-	            System.err.println("Fonction déjà définie");
-	        } 
+		if (func != null) {
+			FunctionType ft = (FunctionType) func.type;
+			if (ft.prototype == false) {
+				System.err.println("Error: Function already defined");
+				System.exit(-1);
+			}
+			if (ft.getReturnType() != returnType) {
+				System.err
+						.println("Error: Return type does not match the function");
+				System.exit(-1);
+			}
+			if (ft.getArguments().size() != params.size()) {
+				System.err
+						.println("Error: Parameters do not match the function");
+				System.exit(-1);
+			}
+			for (int i = 0; i < params.size(); i++) {
+				Type prototypeType = ft.getArguments().get(i);
+				Type paramType = params.get(i).type;
+				if (prototypeType != paramType) {
+					System.err.println("Error: Parameter n°" + i + " of "
+							+ name + " has not the right type");
+					System.exit(-1);
+				}
+			}
 		}
-		
-        LabelSymbol ls = new LabelSymbol(name);
-        FunctionType newFt = new FunctionType(returnType, false);
-        for (VarSymbol vs : params)
-        	newFt.extend(vs.type);
-        FunctionSymbol fs = new FunctionSymbol(ls, newFt);
-        symTab.insert(name, fs);
-        
-        code = Code3aGenerator.genLabel(fs.label);
-        code.append(Code3aGenerator.genBeginFunc());
-        symTab.enterScope();
-        for(VarSymbol vs : params){
-            Operand3a o = symTab.lookup(vs.name);
-            if(o != null && o.getScope() == symTab.getScope()){
-                System.err.println("deux paramètres ont le même nom");
-            }
-            symTab.insert(vs.name, vs);
-            code.append(Code3aGenerator.genVar(vs));
-        }
-        return code;
+
+		LabelSymbol ls = new LabelSymbol(name);
+		FunctionType newFt = new FunctionType(returnType, false);
+		for (VarSymbol vs : params)
+			newFt.extend(vs.type);
+		FunctionSymbol fs = new FunctionSymbol(ls, newFt);
+		symTab.insert(name, fs);
+
+		code = Code3aGenerator.genLabel(fs.label);
+		code.append(Code3aGenerator.genBeginFunc());
+		symTab.enterScope();
+		for (VarSymbol vs : params) {
+			Operand3a o = symTab.lookup(vs.name);
+			if (o != null && o.getScope() == symTab.getScope()) {
+				System.err.println("Error: two parameters have the same name");
+				System.exit(-1);
+			}
+			symTab.insert(vs.name, vs);
+			code.append(Code3aGenerator.genVar(vs));
+		}
+		return code;
 	}
 
 	public static Code3a genPrintText(String text) {
@@ -304,20 +374,21 @@ public class Code3aGenerator {
 		}
 		return code;
 	}
-	
-	public static Code3a readArrayItem(SymbolTable symTab, ArrayAttribute arrAtt){
+
+	public static Code3a readArrayItem(SymbolTable symTab, ArrayAttribute arrAtt) {
 		Code3a code = null;
 		Operand3a o = symTab.lookup(arrAtt.place.getName3a());
 
-        if (o == null) {
-            System.err.println("Error: array " + arrAtt.place.getName3a() + " is not declared.");
-            System.exit(-1);
-        }
+		if (o == null) {
+			System.err.println("Error: array " + arrAtt.place.getName3a()
+					+ " is not declared.");
+			System.exit(-1);
+		}
 
-        VarSymbol temp = SymbDistrib.newTemp();
-        LabelSymbol ls = SymbDistrib.builtinRead;
+		VarSymbol temp = SymbDistrib.newTemp();
+		LabelSymbol ls = SymbDistrib.builtinRead;
 		code = Code3aGenerator.genCallReturn(temp, ls);
-        code.append(genVarTab(arrAtt, temp));
+		code.append(genVarTab(arrAtt, temp));
 		return code;
 	}
 

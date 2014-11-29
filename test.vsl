@@ -1,23 +1,14 @@
-PROTO INT test()
-PROTO VOID noreturn(n)
+PROTO INT test(t[])
 
 FUNC VOID main()
 {
 	INT a,b,c, t[5]
 	a := 4
 	READ t[2]
-	noreturn(a)
 	b := t[2]
 	t[3] := 1 + c
-	a := test()
+	a := test(t)
 }
-
-
-FUNC VOID noreturn(n)
-{
-	PRINT "pas de retour" , n
-}
-
 
 FUNC INT test()
 {

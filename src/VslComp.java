@@ -24,22 +24,25 @@ public class VslComp {
 	public static void main(String[] args) {
 
 		// Check if user supplied a filename
-		/*if (args.length < 1) {
-			System.err.println("USAGE: java VslComp <fichier.vsl>");
-			System.exit(1);
-		}*/
+		/*
+		 * if (args.length < 1) {
+		 * System.err.println("USAGE: java VslComp <fichier.vsl>");
+		 * System.exit(1); }
+		 */
 
 		// Initialize logger and debugging facilities.
 		// Useful for printing error messages and debugging.
-		//Util.init(args[0], args.length > 1 && args[1].equals("-debug"));
+		// Util.init(args[0], args.length > 1 && args[1].equals("-debug"));
 
 		// We encapsulate the code in a generic try block in order to catch any
 		// exception that may be raised.
 		try {
 			// We give the file as input for ANTLR, which produces a character
 			// stream.
-			//ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/tests/testlevel4/level4testfact.vsl");
-			ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/test.vsl");
+			ANTLRFileStream input = new ANTLRFileStream(
+					"/home/matthias/ISTIC/COMP/vsl_comp/tests/example_fact.vsl");
+			// ANTLRFileStream input = new
+			// ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/test.vsl");
 			// Then, we run the lexer...
 			VSLLexer lexer = new VSLLexer(input);
 			// To obtain a token stream.
@@ -81,7 +84,7 @@ public class VslComp {
 
 				// Generates the actual MIPS code, printing it to the
 				// stream chosen previously (by default, System.out).
-				//cg.genCode(code);
+				// cg.genCode(code);
 				// The rest of the main function are standard error handlers.
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
