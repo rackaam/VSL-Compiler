@@ -84,7 +84,7 @@ proto[SymbolTable symTab] returns [Code3a code]
 
 function[SymbolTable symTab] returns [Code3a code]
 :
-    ^( FUNC_KW returnType=type IDENT params=param_list[symTab] ^(BODY st=statement[symTab])
+    ^( FUNC_KW returnType=type IDENT params=param_list[symTab] 
     {
         Operand3a func = symTab.lookup($IDENT.text);
        
@@ -104,7 +104,6 @@ function[SymbolTable symTab] returns [Code3a code]
         code = Code3aGenerator.genLabel(fs.label);
         code.append(Code3aGenerator.genBeginFunc());
         symTab.enterScope();
-
         for(VarSymbol vs : params){
             Operand3a o = symTab.lookup(vs.name);
             if(o != null && o.getScope() == symTab.getScope()){
@@ -113,8 +112,13 @@ function[SymbolTable symTab] returns [Code3a code]
             symTab.insert(vs.name, vs);
             code.append(Code3aGenerator.genVar(vs));
         }
-
-        code.append(st);
+    }
+    ^(BODY st=statement[symTab] 
+        { 
+            code.append(st); 
+        }
+    )
+    {
         symTab.leaveScope();
         code.append(Code3aGenerator.genEndFunc());
     })
@@ -197,6 +201,11 @@ statement [SymbolTable symTab] returns [Code3a code]
     b=block[symTab] 
     {
         code = b;
+    }
+|   ^(RETURN_KW e = expression[symTab])
+    {
+        code = e.code;
+        code.append(new Inst3a(Inst3a.TAC.RETURN, e.place, null, null));
     }
 ;
 
@@ -301,13 +310,40 @@ primary_exp [SymbolTable symTab] returns [ExpAttribute expAtt]
 	{
 		expAtt = a.exp;
 	}
+| 
+    ^(FCALL IDENT (al=argument_list[symTab])?)
+    {
+        Operand3a o = symTab.lookup($IDENT.text);
+        if (o != null) {
+            if(((FunctionType)o.type).getReturnType() == Type.VOID){
+                System.err.println("Error: VOID function cannot be used in primary_exp.");
+                System.exit(-1);
+            }
+            if (((FunctionType) o.type).getArguments().size() == $al.ft.getArguments().size()){
+                // todo verifier le type des arguments
+                Type ty = o .type;
+                VarSymbol temp = SymbDistrib.newTemp();
+                Code3a code = $al.code;
+                code.append(new Inst3a(Inst3a.TAC.CALL, temp, o, null));
+                expAtt = new ExpAttribute(ty, code, temp);
+            }
+            else {
+                System.err.println("Error: incompatible with the function " + $IDENT.text + ".");
+                System.exit(-1);
+            }
+        }
+        else {
+            System.err.println("Error: function " + $IDENT.text + " is not declared.");
+            System.exit(-1);
+        }
+    }
 ;
 
 argument_list[SymbolTable symTab] returns [Code3a code, FunctionType ft]
 @init
 {
     $code = new Code3a();
-    $ft = new FunctionType(Type.INT, false);
+    $ft = new FunctionType(Type.INT, false); // Le type précisé ici ne sera pas pris en compte
 }
 :   (e=expression[symTab]
     {

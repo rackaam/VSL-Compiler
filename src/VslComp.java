@@ -39,6 +39,7 @@ public class VslComp {
 			// We give the file as input for ANTLR, which produces a character
 			// stream.
 			ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/tests/testlevel4/level4testfact.vsl");
+			//ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/test.vsl");
 			// Then, we run the lexer...
 			VSLLexer lexer = new VSLLexer(input);
 			// To obtain a token stream.
@@ -50,7 +51,7 @@ public class VslComp {
 			// currently 'expression'.
 			// *** NOTE: the following line must be changed whenever the main
 			// rule in VSLTreeParser.g is modified. ***
-			VSLParser.s_return r = parser.s();
+			VSLParser.program_return r = parser.program();
 			// The parser produces an AST.
 			CommonTree t = (CommonTree) r.getTree();
 			// If debugging is on, this prints the resulting tree in LISP

@@ -3,7 +3,6 @@ FUNC VOID main()
 {
   INT i, t[11]
   i := 0
-
   WHILE 11 -i
   DO
    {
