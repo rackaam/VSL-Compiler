@@ -5,6 +5,7 @@ FUNC VOID main()
 {
 	INT a,b,c, t[5]
 	a := 4
+	READ t[2]
 	noreturn(a)
 	b := t[2]
 	t[3] := 1 + c
