@@ -1,13 +1,22 @@
 PROTO INT test()
+PROTO VOID noreturn(n)
 
 FUNC VOID main()
 {
 	INT a,b,c, t[5]
 	a := 4
+	noreturn(a)
 	b := t[2]
 	t[3] := 1 + c
 	a := test()
 }
+
+
+FUNC VOID noreturn(n)
+{
+	PRINT "pas de retour" , n
+}
+
 
 FUNC INT test()
 {
