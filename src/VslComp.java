@@ -38,8 +38,8 @@ public class VslComp {
 		try {
 			// We give the file as input for ANTLR, which produces a character
 			// stream.
-			ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/tests/testlevel4/level4testfact.vsl");
-			//ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/test.vsl");
+			//ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/tests/testlevel4/level4testfact.vsl");
+			ANTLRFileStream input = new ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/test.vsl");
 			// Then, we run the lexer...
 			VSLLexer lexer = new VSLLexer(input);
 			// To obtain a token stream.

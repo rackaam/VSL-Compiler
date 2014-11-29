@@ -1,7 +1,15 @@
+PROTO INT test()
+
 FUNC VOID main()
 {
 	INT a,b,c, t[5]
 	a := 4
 	b := t[2]
 	t[3] := 1 + c
+	a := test()
+}
+
+FUNC INT test()
+{
+	RETURN 5
 }

@@ -319,11 +319,15 @@ primary_exp [SymbolTable symTab] returns [ExpAttribute expAtt]
                 System.err.println("Error: VOID function cannot be used in primary_exp.");
                 System.exit(-1);
             }
-            if (((FunctionType) o.type).getArguments().size() == $al.ft.getArguments().size()){
+            List<Type> expectedArgs = ((FunctionType) o.type).getArguments();
+            if (   (al == null && expectedArgs == null) 
+                || (al == null && expectedArgs.size() == 0)
+                || (expectedArgs.size() == $al.ft.getArguments().size())){
                 // todo verifier le type des arguments
-                Type ty = o .type;
+                Type ty = o.type;
                 VarSymbol temp = SymbDistrib.newTemp();
-                Code3a code = $al.code;
+                Code3a code = new Code3a();
+                code.append($al.code);
                 code.append(new Inst3a(Inst3a.TAC.CALL, temp, o, null));
                 expAtt = new ExpAttribute(ty, code, temp);
             }
