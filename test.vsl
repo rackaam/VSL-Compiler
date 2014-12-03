@@ -1,16 +1,35 @@
-PROTO INT test(t[])
+PROTO INT fact(k)
 
 FUNC VOID main()
 {
-	INT a,b,c, t[5]
-	a := 4
-	READ t[2]
-	b := t[2]
-	t[3] := 1 + c
-	a := test(t)
+	INT x,i,t[11]
+	PRINT "Input x between 0 and 11:\n"
+	READ x
+	i := 0
+	WHILE x-i
+	DO
+	{
+		t[i] := fact(i)
+		i := i+1
+	}
+	DONE
+	
+	i := 0
+	WHILE x-i
+	DO
+	{
+		PRINT "f(", i, ") = ", t[i], "\n"
+		i := i+1
+	}
+	DONE
 }
 
-FUNC INT test()
+FUNC INT fact(n)
 {
-	RETURN 5
+	IF n
+	THEN
+		RETURN n*fact(n-1)
+	ELSE
+		RETURN 1
+	FI
 }

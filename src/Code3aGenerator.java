@@ -133,7 +133,8 @@ public class Code3aGenerator {
 			return null;
 		} else {
 			VarSymbol temp = SymbDistrib.newTemp();
-			Code3a code = genTabVar(temp, o, e);
+			Code3a code = genVar(temp);
+			code.append(genTabVar(temp, o, e));
 			ExpAttribute exp = new ExpAttribute(o.type, code, temp);
 			return new ArrayAttribute(o, e, exp);
 		}
@@ -273,7 +274,7 @@ public class Code3aGenerator {
 				}
 				Type ty = o.type;
 				VarSymbol temp = SymbDistrib.newTemp();
-				Code3a code = new Code3a();
+				Code3a code = genVar(temp);
 				if (alr != null)
 					code.append(alr.code);
 				code.append(genCallReturn(temp, o));
