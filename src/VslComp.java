@@ -43,7 +43,7 @@ public class VslComp {
 			// We give the file as input for ANTLR, which produces a character
 			// stream.
 			ANTLRFileStream input = new ANTLRFileStream(
-					"/home/matthias/ISTIC/COMP/vsl_comp/test.vsl");
+					"/private/student/0/80/15005180/VSL-Compiler/tests/testlevel4/level4testhanoi.vsl");
 			// ANTLRFileStream input = new
 			// ANTLRFileStream("/home/matthias/ISTIC/COMP/vsl_comp/test.vsl");
 			// Then, we run the lexer...
@@ -77,7 +77,7 @@ public class VslComp {
 
 				// We prepare the MIPS code generator, which will compile
 				// the three-address code into MIPS assembly.
-				File file = new File("/home/matthias/ISTIC/COMP/vsl_comp/nachos/file.s");
+				File file = new File("/private/student/0/80/15005180/VSL-Compiler/nachos/test/file.s");
 				PrintStream ps = new PrintStream(file);
 				MIPSCodeGenerator cg = new MIPSCodeGenerator(ps);
 
